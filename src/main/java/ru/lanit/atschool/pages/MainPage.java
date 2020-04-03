@@ -1,7 +1,10 @@
 package ru.lanit.atschool.pages;
 
+
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import ru.lanit.atschool.Intefaces.NameOfElement;
+import ru.lanit.atschool.webdriver.WebDriverManager;
 
 
 import java.util.List;
@@ -9,7 +12,6 @@ public class MainPage extends BasePage {
 
     /**
      * Метод открывает браузер на заданной странице
-     * страница задается в файле config.properties.
      */
     public void openPage(String url) {
         driver.get(url);
@@ -17,38 +19,91 @@ public class MainPage extends BasePage {
     }
 
     /**
-     * Кнопка "Search".
+     * Вкладка "Категории".
      */
+    @NameOfElement("вкладку_Категории")
+    @FindBy(linkText = "Категории")
+    public WebElement goToCategories;
 
-    @FindBy(xpath = "//input[@value='Search']")
-    public WebElement btnSearch;
 
     /**
-     * Кнопка "Посмотреть все запросы".
+     * Вкладка "Пользователи".
      */
-
-    @FindBy(xpath = "//button[text()='Посмотреть все запросы']")
-    public WebElement btnShowAllRequests;
+    @FindBy(linkText = "Пользователи")
+    public WebElement goToUsers;
 
     /**
-     * Выпадающий список "Количество".
+     *  Кнопка поиска пользователей
      */
-
-    @FindBy(css = "#page_number")
-    public WebElement dropdownListCount;
+    @FindBy(xpath = "//a[@class = \"navbar-icon\"]/i[text() = \"search\"]")
+    public WebElement searchButton;
 
     /**
-     * Опции выпадающего списка "Количество".
+     * Строка для поиска пользователей
      */
-
-    @FindBy(css = ".custom-select option")
-    public List<WebElement> dropdownListCountCollection;
+    @FindBy(xpath = "//input[@class = \"form-control\"]")
+    public WebElement searchArea;
 
     /**
-     * Поле ввода "Введите ключевое слово".
+     *  Кнопка для просмотра всех пользователей похожих по запросу
      */
+    @FindBy(xpath = "//li[@class=\"dropdown-search-footer\"]")
+    public WebElement allUsersHaving;
 
-    @FindBy(xpath = "//input[@placeholder='Введите ключевое слово']")
-    public WebElement inputField;
+    /**
+     *  Ник пользователя, которого ищем
+     */
+    @FindBy(xpath = "//a[text()=\"Eduard\"]")
+    public WebElement userNameSeach;
+
+    /**
+     *  Кнопка "Войти"
+     */
+    @FindBy(xpath = "//button[text() = \"Войти\"]")
+    public WebElement authetificationButton;
+
+    /**
+     *  Название формы авторизации
+     */
+    @FindBy(xpath = "//h4[text() = \"Войти\"]")
+    public WebElement loginForm;
+
+    /**
+     * Логин пользователя
+     */
+    @FindBy(id = "id_username")
+    public WebElement loginFormName;
+
+    /**
+     *  Пароль пользователя
+     */
+    @FindBy(id = "id_password")
+    public WebElement loginFormPassword;
+
+    /**
+     * Подтверждение авторизации
+     */
+    @FindBy(xpath = "//button[@type = \"submit\"][text() = \"Войти\"]")
+    public WebElement submitButton;
+
+    /**
+     * Кнопка открывает меню пользователя
+     */
+    @FindBy(xpath = "//a/img[@class=\"user-avatar\"]")
+    public WebElement userMenu;
+
+    /**
+     * Кнопка разлогинивает пользователя
+     */
+    @FindBy(xpath = "//button[text()=\"Выход\"]")
+    public WebElement userExit;
+
+    /**
+     * Кнопка выхода из формы авторизации
+     */
+    @FindBy(xpath = "//*[@id=\"modal-mount\"]/div/div/div/button")
+    public WebElement exitAuthorization;
+
+
 }
 

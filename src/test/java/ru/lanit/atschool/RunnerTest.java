@@ -11,6 +11,7 @@ import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
         features = {"src/test/resources/features"},
+        tags = {"@auth"},
         glue = {"ru.lanit.atschool.steps"}
 )
 
