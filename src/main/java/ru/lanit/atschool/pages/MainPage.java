@@ -4,16 +4,24 @@ package ru.lanit.atschool.pages;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.lanit.atschool.Intefaces.NameOfElement;
+import ru.lanit.atschool.helpers.ConfigReader;
 import ru.lanit.atschool.webdriver.WebDriverManager;
 
 
+import java.io.IOException;
 import java.util.List;
 public class MainPage extends BasePage {
 
     /**
      * Метод открывает браузер на заданной странице
      */
-    public void openPage(String url) {
+    public void openPage() {
+        String url = null;
+        try {
+            url = ConfigReader.getStringSystemProperty("url");
+        } catch (IOException e) {
+            logger.error("Невозможно получить адрес сайта");
+        }
         driver.get(url);
         logger.info("Выполнен вход на страницу: " + url);
     }

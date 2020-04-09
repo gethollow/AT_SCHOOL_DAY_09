@@ -1,33 +1,52 @@
 package ru.lanit.atschool.steps;
 
+import com.sun.jna.platform.FileUtils;
 import io.cucumber.java.*;
 import io.cucumber.java.ru.*;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Attachment;
+import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.ILoggerFactory;
 import org.testng.Assert;
+import org.testng.annotations.AfterTest;
+import ru.lanit.atschool.pages.BasePage;
 import ru.lanit.atschool.pages.MainPage;
 import ru.lanit.atschool.webdriver.WebDriverManager;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 
 public class MainPageSteps {
     private WebDriver driver = WebDriverManager.getDriver();
     private String current_url = driver.getCurrentUrl();
-    private MainPage page=new MainPage();
+    private MainPage page = new MainPage();
     private WebDriverWait wait;
 
     @Before
-    public void beforeScenario(){
+    public void beforeScenario() {
         wait = new WebDriverWait(driver, 7);
     }
 
     @After
-    public void afterScenario(){
+    public void afterScenario() {
         WebDriverManager.quit();
     }
 
-    @Пусть("открыт браузер и введен адрес \"(.*)\"$")
-    public void openedBrowserAndEnteredUrl(String url){page.openPage(url);}
+    @Пусть("открыт браузер и введен адрес")
+    public void openedBrowserAndEnteredUrl() {
+        page.openPage();
+    }
 
     @И("пользователь кликнул на {string}")
     public void openCategories(String categories) {
@@ -38,7 +57,6 @@ public class MainPageSteps {
             Assert.fail("Вкладка Категории недоступна! " + e.getMessage());
         }
     }
-
 
     @И("пользоватль перешел на вкладку Пользователь")
     public void openUsers() {
@@ -56,13 +74,13 @@ public class MainPageSteps {
         try {
             wait.until(elementToBeClickable(page.searchButton));
             page.searchButton.click();
-        } catch (Exception e){
+        } catch (Exception e) {
             Assert.fail("Не найден элемент для поиска пользователей" + e.getMessage());
         }
     }
 
     @Тогда("введет в форму поиска пользователей (.*)$")
-    public void searchUserForm(String name){
+    public void searchUserForm(String name) {
         try {
             wait.until(elementToBeClickable(page.searchArea));
             page.searchArea.click();
@@ -73,7 +91,7 @@ public class MainPageSteps {
     }
 
     @И("кликнет на \"Показать полные результаты \"Пользователи\"\"")
-    public void openAllUsers(){
+    public void openAllUsers() {
         try {
             wait.until(elementToBeClickable(page.allUsersHaving));
             page.allUsersHaving.click();
@@ -83,7 +101,7 @@ public class MainPageSteps {
     }
 
     @То("кликнет на пользователя под ником Eduard")
-    public void openUserProfile(){
+    public void openUserProfile() {
         try {
             wait.until(elementToBeClickable(page.userNameSeach));
             page.userNameSeach.click();
@@ -105,7 +123,7 @@ public class MainPageSteps {
             wait.until(elementToBeClickable(page.authetificationButton));
             page.authetificationButton.click();
         } catch (Exception e) {
-            Assert.fail("авыавыа" + e.getMessage());
+            Assert.fail("Не обнаружена форма авторизации" + e.getMessage());
         }
     }
 
@@ -116,7 +134,7 @@ public class MainPageSteps {
             page.loginFormName.click();
             page.loginFormName.sendKeys(username);
         } catch (Exception e) {
-            Assert.fail("авыавыа" + e.getMessage());
+            Assert.fail("Не обнаружено поле ввода логина" + e.getMessage());
         }
     }
 
@@ -127,7 +145,7 @@ public class MainPageSteps {
             page.loginFormPassword.click();
             page.loginFormPassword.sendKeys(password);
         } catch (Exception e) {
-            Assert.fail("павпвапва" + e.getMessage());
+            Assert.fail("Не обнаружено поле ввода пароль" + e.getMessage());
         }
     }
 
@@ -137,7 +155,7 @@ public class MainPageSteps {
             wait.until(elementToBeClickable(page.submitButton));
             page.submitButton.click();
         } catch (Exception e) {
-            Assert.fail("павпапав" + e.getMessage());
+            Assert.fail("Не обнарежуна кнопка подтвержения авторизации" + e.getMessage());
         }
     }
 
@@ -154,10 +172,19 @@ public class MainPageSteps {
 
     @Если("пользователь ввел неверные данные")
     public void userFailure() {
-        if(current_url.equals("https://dev.n7lanit.ru")) {
+        if (current_url.equals("https://dev.n7lanit.ru")) {
             Assert.assertTrue(driver.findElement(By.xpath("//button[@type=\"button\"][text()=\"Войти\"]")).isDisplayed(), "Данные введены не верно");
             page.exitAuthorization.click();
         }
     }
 
+    /**
+     * Метод для скриншотов после каждого шага
+     */
+    @AfterStep
+    public void takeScreenshot() throws IOException {
+        File screenshotBase64 = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        InputStream targetStream = new FileInputStream(screenshotBase64);
+        Allure.addAttachment("Screenshot", "image/png", targetStream, "png");
+    }
 }
