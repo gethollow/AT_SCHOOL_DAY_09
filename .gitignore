@@ -6,6 +6,9 @@ logs/
 # Maven
 target/
 
+# Allure
+.allure
+
 # Intellij
 *.iml
 *.iws
