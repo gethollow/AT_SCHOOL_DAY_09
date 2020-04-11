@@ -1,20 +1,14 @@
 package ru.lanit.atschool.steps;
 
-import com.sun.jna.platform.FileUtils;
 import io.cucumber.java.*;
 import io.cucumber.java.ru.*;
 import io.qameta.allure.Allure;
-import io.qameta.allure.Attachment;
-import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.slf4j.ILoggerFactory;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-import ru.lanit.atschool.pages.BasePage;
 import ru.lanit.atschool.pages.MainPage;
 import ru.lanit.atschool.webdriver.WebDriverManager;
 
@@ -22,8 +16,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 
